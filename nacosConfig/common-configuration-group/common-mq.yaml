@@ -1,0 +1,19 @@
+# MQ配置
+isys:
+  mq:
+    vender: rocketMQ
+rocketmq:
+  name-server: 10.15.30.46:9876;10.15.30.47:9876
+  producer:
+    group: rocketmq-group # 生产者分组
+    access-key: ztoadmin
+    secret-key: ztoadmin
+  consumer:
+    access-key: ztoadmin
+    secret-key: ztoadmin
+
+# rocketmq:
+#   name-server: 127.0.0.1:9876
+#   producer:
+#     group: rocketmq-group # 生产者分组
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ztozy-freight-system</artifactId>
+        <groupId>com.zto56</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>freight-provider</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>freight-provider-adapter</module>
+        <module>freight-provider-app</module>
+        <module>freight-provider-client</module>
+        <module>freight-provider-common</module>
+        <module>freight-provider-domain</module>
+        <module>freight-provider-infrastructure</module>
+        <module>freight-provider-start</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+
+</project>

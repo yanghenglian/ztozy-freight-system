@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    dynamic:
+      primary: uka_fsc #设置默认的数据源或者数据源组,默认值即为master
+      strict: true #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
+      datasource:
+        uka_fsc:
+          url: jdbc:mysql://10.15.30.228:3306/uka_fsc?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
+          username: uka
+          password: Ztky#$%345
+        uka_ntocc:
+          url: jdbc:mysql://10.15.30.228:3306/uka_ntocc?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
+          username: uka
+          password: Ztky#$%345
+        uka_oms:
+          url: jdbc:mysql://10.15.30.228:3306/uka_oms?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
+          username: uka
+          password: Ztky#$%345
+        uka_carrier:
+          url: jdbc:mysql://10.15.30.228:3306/uka_carrier?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
+          username: uka
+          password: Ztky#$%345

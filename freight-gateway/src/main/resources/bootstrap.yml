@@ -1,0 +1,65 @@
+spring:
+  application:
+    name: freight-gateway # 应用名
+
+  profiles:
+    active: dev
+
+log:
+  level:
+    root: info   #主日志级别
+    com.zto56.freight: debug   #该项目日志级别，当需要打印sql时请开启为debug
+  path: logs/${spring.application.name}  #日志存放地址
+
+logging:
+  level:
+    com.zto56.freight: debug
+
+##上面是基础配置，不用上配置中心
+##下面是环境区分
+---
+# local环境
+spring:
+  profiles: local
+  cloud:
+    nacos:
+      # Nacos注册中心
+      discovery:
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: nacos
+        namespace: ca9e32cf-3414-4f7b-8a93-6139d930bedc
+
+      # Nacos配置中心
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        username: ${spring.cloud.nacos.discovery.username}
+        password: ${spring.cloud.nacos.discovery.password}
+        namespace: 8cfced7a-4f17-4525-a6a7-9f501799457c
+        group: ${spring.application.name}-group
+        prefix: ${spring.application.name}
+        file-extension: yaml
+
+---
+# dev环境
+spring:
+  profiles: dev
+
+  cloud:
+    nacos:
+      # Nacos注册中心
+      discovery:
+        server-addr: 10.15.30.80:8848,10.15.30.82:8848
+        username: nacos
+        password: ztky@nacos
+        namespace: ca9e32cf-3414-4f7b-8a93-6139d930bedc
+
+      # Nacos配置中心
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        username: ${spring.cloud.nacos.discovery.username}
+        password: ${spring.cloud.nacos.discovery.password}
+        namespace: 50a179ff-0448-4ad8-99bb-a22c02f4f4b1
+        group: ${spring.application.name}-group
+        prefix: ${spring.application.name}
+        file-extension: yaml

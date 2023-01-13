@@ -1,0 +1,66 @@
+server:
+  port: 7002
+
+# 数据库配置
+spring:
+  cloud:
+    sentinel:
+      web-context-unify: false
+      # 饥饿加载
+      eager: true
+      transport:
+        # sentinel dashboard
+        dashboard: 127.0.0.1:8888
+
+    stream:
+      rocketmq:
+        binder:
+          name-server: 10.15.30.46:9876;10.15.30.47:9876
+          # 不加, 会报错：Property 'group' is required - producerGroup
+          group: rocketmq-group
+          access-key: ztoadmin
+          secret-key: ztoadmin
+
+      #bindings 具体生产消息、消费消息的桥梁
+      bindings:
+        demo01-input:
+          destination: test-topic1
+          group: test-group1
+        demo01-output:
+          destination: test-topic1
+          group: test-group1
+
+        # demo02-input:
+        #   destination: test-topic2
+        #   group: test-group2
+        # demo02-output:
+        #   destination: test-topic2
+        #   group: test-group2
+
+  zipkin:
+    base-url: http://127.0.0.1:9411
+    discovery-client-enabled: false
+
+  sleuth:
+    sampler:
+      # 抽样率,%
+      rate: 100
+
+feign:
+  sentinel:
+    enabled: true
+
+  client:
+    config:
+      # default的同级也可以单独定制不同服务的设置,key为服务名
+      default:
+        connectTimeout: 5000
+        # 响应的超时时间(毫秒)
+        readTimeout: 5000
+        #  NONE【性能最佳，适用于生产】：不记录任何日志（默认值）。
+        #  BASIC【适用于生产环境追踪问题】：仅记录请求方法、URL、响应状态代码以及执行时间。
+        #  HEADERS：记录BASIC级别的基础上，记录请求和响应的header。
+        #  FULL【比较适用于开发及测试环境定位问题】：记录请求和响应的header、body和元数据。
+        # 需要配合日志的级别问debug来使用
+        loggerLevel: FULL
+

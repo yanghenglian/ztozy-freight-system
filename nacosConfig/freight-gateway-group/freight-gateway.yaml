@@ -1,0 +1,28 @@
+server:
+  port: 7001
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: freight-provider
+          uri: lb://freight-provider
+          predicates:
+            - Path=/api/provider/**
+          filters:
+            - StripPrefix=2
+        - id: freight-consumer
+          uri: lb://freight-consumer
+          predicates:
+            - Path=/api/consumer/**
+          filters:
+            - StripPrefix=2
+
+  zipkin:
+    base-url: http://127.0.0.1:9411
+    discovery-client-enabled: false
+
+  sleuth:
+    sampler:
+      # 抽样率,%
+      rate: 100

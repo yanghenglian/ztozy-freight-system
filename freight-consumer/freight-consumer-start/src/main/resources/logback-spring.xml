@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+    <!-- 日志存放路径, 读取application.yml 需要使用springProperty获取 -->
+    <springProperty scope="context" name="currentLoggerFilePath" source="log.path" defaultValue="logs"/>
+    <springProperty scope="context" name="currentActive" source="spring.profiles.active" defaultValue="default"/>
+    <springProperty scope="context" name="applicationName" source="spring.application.name" defaultValue="application"/>
+    <!-- 主日志级别配置  -->
+    <springProperty scope="context" name="currentRootLevel" source="log.level.root"/>
+
+    <!-- 项目配置， 如修改包名，请搜索并全部替换掉  -->
+    <springProperty scope="context" name="currentProjectLevel" source="log.level.com.zto56.freight"/>
+
+    <!-- 日志文件名称  logback属性 -->
+    <property name="currentLoggerFileName" value="${applicationName}-${currentActive}" />
+    <!-- 日志格式, 参考：https://logback.qos.ch/manual/layouts.html -->
+    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} appId:${currentLoggerFileName} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr([%X{traceId}]){faint} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <property name="currentLoggerPattern" value="%d{${yyyy-MM-dd HH:mm:ss.SSS}} appId:${currentLoggerFileName} ${PID:- } ${LOG_LEVEL_PATTERN:-%5p} [%X{traceId}] --- [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+    <!-- appender： 控制台日志 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder charset="UTF-8" >
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- appender：主日志文件 -->
+    <appender name="ALL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 日志文件路径及文件名 -->
+        <file>${currentLoggerFilePath}/${currentLoggerFileName}-info.log</file>
+        <!-- 内容编码及格式 -->
+        <encoder charset="UTF-8" ><pattern>${currentLoggerPattern}</pattern></encoder>
+        <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${currentLoggerFilePath}/${currentLoggerFileName}-info.%d{yyyy-MM-dd}-%i.log.gz</fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+    </appender>
+
+    <!-- appender：错误信息日志文件 -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 日志文件路径及文件名 -->
+        <file>${currentLoggerFilePath}/${currentLoggerFileName}-error.log</file>
+        <!-- 内容编码及格式 -->
+        <encoder charset="UTF-8" ><pattern>${currentLoggerPattern}</pattern></encoder>
+        <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${currentLoggerFilePath}/${currentLoggerFileName}-error.%d{yyyy-MM-dd}-%i.log.gz</fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <!-- 此日志文件只记录ERROR级别的 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- appender：warn信息日志文件 -->
+    <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 日志文件路径及文件名 -->
+        <file>${currentLoggerFilePath}/${currentLoggerFileName}-warn.log</file>
+        <!-- 内容编码及格式 -->
+        <encoder charset="UTF-8" ><pattern>${currentLoggerPattern}</pattern></encoder>
+        <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${currentLoggerFilePath}/${currentLoggerFileName}-warn.%d{yyyy-MM-dd}-%i.log.gz</fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <!-- 此日志文件只记录ERROR级别的 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 主日志级别配置 -->
+    <root level="${currentRootLevel}">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="ALL_FILE" />
+        <appender-ref ref="ERROR_FILE" />
+    </root>
+
+    <!-- 项目日志级别配置 -->
+    <logger name="com.zto56.freight" level="${currentProjectLevel}"/>
+
+</configuration>
